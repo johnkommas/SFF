@@ -97,7 +97,7 @@ def expose_statistics():
     # Count total button presses globally
     total_button_presses = df.groupby('report').size()
 
-    user_images = df.groupby('username')['user_image'].first()
+    user_images = df.groupby('username')['user_image'].last()
 
     blocks = [
         {"type": "divider"},
