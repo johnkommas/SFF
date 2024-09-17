@@ -143,7 +143,6 @@ def expose_statistics():
     for user, presses in user_presses.items():
         user_reports = user_button_presses[user]
         user_image = user_images[user]
-
         # Add user's profile picture to blocks
         blocks.append({
             "type": "section",
@@ -178,7 +177,7 @@ def expose_statistics():
     return blocks
 
 
-def run(event, admin):
+def run(event, admin, super_user):
     """
     Generate a block kit suitable for a Home tab view in a Slack App.
 
@@ -250,6 +249,7 @@ def run(event, admin):
             button = create_button(text, action_id)
             action_block = create_action_block([button])
             blocks.append(action_block)
+    if super_user:
         blocks.extend(expose_statistics())
 
     return {
