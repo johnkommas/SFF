@@ -183,7 +183,7 @@ def run(event, admin):
             button = create_button(text, action_id)
             action_block = create_action_block([button])
             blocks.append(action_block)
-    blocks.extend(expose_statistics())
+        blocks.extend(expose_statistics())
 
     return {
         "type": "home",
