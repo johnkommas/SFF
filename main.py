@@ -18,7 +18,7 @@ token_holder = {}
 
 
 @app.event("message")
-def handle_message_events(body, logger,):
+def handle_message_events(body, logger, ):
     """
     Handles message events occurring within a Slack App.
 
@@ -39,7 +39,6 @@ def handle_message_events(body, logger,):
     """
 
     logger.info(body)
-
 
 
 @app.action("request_arxeio")
@@ -76,6 +75,7 @@ def action_button_click(body, ack, say, logger, client):
         trigger_id=body["trigger_id"],
         view=modals.choose_archive())
 
+
 @app.action("reuest_phones")
 def action_button_click(body, ack, say, logger, client):
     """
@@ -101,16 +101,19 @@ def action_button_click(body, ack, say, logger, client):
     The 'ack()' function should be called immediately at the start of the event handler to acknowledge Slack.
     The 'client.views_open()' function opens a new view (modal) within the Slack interface.
     """
-
     text = 'ΤΗΛΕΦΩΝΑ ΕΠΙΚΟΙΝΩΝΙΑΣ'
-    reports.button_reports(body, client, logger, text)
-    # Acknowledge the shortcut request
-    ack()
-    # Call the views_open method using the built-in WebClient
+    try:
+        # Acknowledge the shortcut request
+        ack()
+        # Call the views_open method using the built-in WebClient
 
-    client.views_open(
-        trigger_id=body["trigger_id"],
-        view=modals.send_phones())
+        client.views_open(
+            trigger_id=body["trigger_id"],
+            view=modals.send_phones())
+    except Exception as e:
+        logger.error(f"Error responding to 'archive_step_b' button click: {e}")
+    finally:
+        reports.button_reports(body, client, logger, text)
 
 
 @app.view("button_archive_step_b")
@@ -146,15 +149,17 @@ def handle_submission(ack, body, view, logger, client):
 
     text = 'ΑΡΧΕΙΟ ΟΙ ΑΙΤΗΣΕΙΣ ΜΑΣ '
     ack()
+    key = ''
     try:
         logger.info(body)
         key = modals.handle_archive_step_b(view)
-        reports.button_reports(body,client, logger, text, key)
         client.views_open(
             trigger_id=body["trigger_id"],
             view=modals.represent_data(key))
     except Exception as e:
         logger.error(f"Error responding to 'archive_step_b' button click: {e}")
+    finally:
+        reports.button_reports(body, client, logger, text, key)
 
 
 @app.action("archive_step_b")
@@ -224,9 +229,11 @@ def publish_home_view(client, event, logger):
     """
 
     admin_users = os.getenv('SLACK_ADMINISTRATORS')
+    super_users = os.getenv('SLACK_SUPER_USERS')
     user_info = client.users_info(user=event["user"])
     user_image = user_info['user']['profile']['image_original']
     is_admin = event["user"] in admin_users
+    is_super_user = event["user"] in super_users
     if is_admin:
         print(f'Admin User {event["user"]}, {user_info['user'].get('real_name')}\n')
     else:
@@ -234,7 +241,7 @@ def publish_home_view(client, event, logger):
     try:
         client.views_publish(
             user_id=event["user"],
-            view=home_page.run(event, is_admin))
+            view=home_page.run(event, is_admin, is_super_user))
     except Exception as e:
         logger.error(f"Error publishing view to Home Tab: {e}")
 
