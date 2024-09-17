@@ -11,6 +11,20 @@ def load_requests():
 
 
 def create_section(part_text, image_url):
+    """
+        Create a Slack 'section' block.
+
+        This function is used to generate one Slack message 'section' block.
+        A 'section' block is one of the many block layouts available in Slack
+        and it is suitable for text and image display.
+
+        Parameters:
+        part_text (str): The text that will be displayed in the section.
+        image_url (str): The URL of the image that will be displayed on the side of the text.
+
+        Returns:
+        dict: Returns a dictionary formatted as a Slack 'section' block.
+    """
     return {
         "type": "section",
         "text": {
@@ -98,10 +112,24 @@ def display_status(request, protocol):
 
 
 def check():
-    requests = load_requests()
-    all_keys = list(requests.keys())
-    for key, value in requests.items():
-        # Fetch request details using the protocol number
-        request_data = requests.get(key)
-        # Display the status of the request
-        display_status(request_data, key)
+    """
+    Check the status of all requests.
+
+    This function iterates over all the requests in the system and displays
+    their status. The function does this by:
+    - Loading all available requests
+    - Iterating through every request
+    - Fetching detailed data for each specific request
+    - Displaying the status of each request
+
+    Parameters:
+    None
+
+    Returns:
+    None
+    """
+    requests = load_requests()  # Load all existing requests
+    all_keys = list(requests.keys())  # Get all request keys
+    for key, value in requests.items():  # Iterate over each request
+        request_data = requests.get(key)  # Retrieve specific request data
+        display_status(request_data, key)  # Display status of the request
