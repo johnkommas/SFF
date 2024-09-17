@@ -4,6 +4,20 @@ import pandas as pd
 
 
 def create_section(text):
+    """
+        Creates a section block for a Slack message along with a divider.
+
+        This function creates a section block for a Slack message, which is
+        suitable to display text information. This function also adds a divider
+        block preceding the section.
+
+        Parameters:
+        text (str): The text content to display in the section block.
+
+        Returns:
+        tuple: A tuple containing a dictionary for the divider block and a
+        dictionary for the section block.
+    """
     return {
         "type": "divider"
     }, {
@@ -16,6 +30,21 @@ def create_section(text):
 
 
 def create_action_block(buttons: List[Dict]) -> Dict[str, List[Dict]]:
+    """
+        Creates an action block for a Slack message.
+
+        This function creates an action block which holds interactive components
+        like buttons. The `buttons` parameter should be a List of Dicts where each
+        Dict defines a button (in Slack button JSON format).
+
+        Parameters:
+        buttons (List[Dict]): A list of dictionaries where each dictionary is a
+        Slack formatted button component.
+
+        Returns:
+        dict: A dictionary representing a Slack 'action' block containing all
+        supplied buttons.
+    """
     return {
         "type": "actions",
         "elements": buttons
@@ -23,6 +52,21 @@ def create_action_block(buttons: List[Dict]) -> Dict[str, List[Dict]]:
 
 
 def create_button(text: str, action_id: str) -> Dict[str, str]:
+    """
+        Creates a button for a Slack message.
+
+        This function creates a single Slack formatted button component
+        with plain text and a specified action ID.
+
+        Parameters:
+        text (str): The text to be displayed on the button.
+        action_id (str): A unique identifier for the button. When the button is
+                         clicked, Slack sends an interaction payload which
+                         includes actions and the `action_id`.
+
+        Returns:
+        dict: A dictionary representing a Slack 'button' component.
+    """
     return {
         "type": "button",
         "text": {"type": "plain_text", "text": text, "emoji": True},
@@ -33,6 +77,16 @@ def create_button(text: str, action_id: str) -> Dict[str, str]:
 
 
 def expose_statistics():
+    """
+    Aggregate and expose button press statistics.
+
+    This function reads from a CSV file named 'statistic_records.csv', which contains records of button presses from
+    users. It aggregates these statistics both globally and on a per-user basis. It then formats the aggregated data
+    into a Slack-friendly format called 'blocks' for easy message construction.
+
+    Returns:
+    list: A list of Slack blocks representing the statistics information.
+    """
     df = pd.read_csv('statistic_records.csv')
     total_presses = df['report'].count()
     user_presses = df.groupby('username')['report'].count()
@@ -125,6 +179,19 @@ def expose_statistics():
 
 
 def run(event, admin):
+    """
+    Generate a block kit suitable for a Home tab view in a Slack App.
+
+    This function creates a formatted collection of message blocks for a Home tab view in Slack. It includes several statically defined message sections and buttons. If the user has admin permissions, additional buttons and statistical data are added to the view.
+
+    Parameters:
+    event (dict): A dictionary containing data about the triggering event, such as the user ID of the user who interacted with the button.
+    admin (bool): A boolean specifying if the user has admin permissions.
+
+    Returns:
+    dict: A dictionary representing a Slack Home tab view in block kit format.
+    """
+
     part_a = f"""
 \tΣκοπός του Συλλόγου είναι η υποστήριξη της Δημοτικής :musical_note:Φιλαρμονικής της πόλης της Νεάπολης Λασιθίου, η διάδοση, ανάδειξη και παραγωγή πολιτιστικών δραστηριοτήτων, στην ευρύτερη περιοχή του Δήμου Αγίου Νικολάου, η συνεργασία με άλλα ομοειδή σωματεία, σε όλη την επικράτεια, η συνένωση όλων των κατοίκων της Νεάπολης σε μια μαζική οργάνωση για την ανάδειξη των δραστηριοτήτων της :notes:Φιλαρμονικής της πόλης, η βελτίωση και καλυτέρευση της πολιτιστικής και κοινωνικής ζωής των κατοίκων της Νεάπολης με κάθε πρόσφορο μέσο, η μελέτη, προώθηση και επίλυση κάθε θέματος που αφορά την μουσική δραστηριότητα στην πόλη.
 """
