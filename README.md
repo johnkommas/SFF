@@ -1,6 +1,10 @@
+
 # Python FastAPI Project
 
 A project that starts a FastAPI server to run various functions and handle specific events.
+
+![promote](https://github.com/user-attachments/assets/bffb8dd8-48a4-490f-bf31-a3ebf6c56251)
+
 
 ## Project Description
 
