@@ -9,7 +9,7 @@ A project that starts a FastAPI server to run various functions and handle speci
 
 ## Project Description
 
-This project is implemented using FastAPI. It provides a range of functions from handling message events, submissions, to managing action clicks and more. Alongside these functionalities, it also includes the root endpoint which returns a sample "Hello, World!" response. This project will automatically detect the local IP address of the host machine and start the server on this IP.
+This project is implemented using FastAPI. It provides a range of functions from handling message events, submissions, to managing action clicks and more. This project will automatically detect the local IP address of the host machine and start the server on this IP.
 
 ## Main Features
 
