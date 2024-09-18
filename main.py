@@ -1,12 +1,12 @@
 import socket
-import threading
 import uvicorn
 from fastapi import FastAPI, Request
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from dotenv import load_dotenv
-from dev_slack import home_page, modals, reports
+from dev_slack import home_page, modals, reports, bot_presence
 import os
+from contextlib import asynccontextmanager
 
 # load .env file
 load_dotenv()
@@ -245,8 +245,28 @@ def publish_home_view(client, event, logger):
     except Exception as e:
         logger.error(f"Error publishing view to Home Tab: {e}")
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Asynchronous context manager to manage the lifespan of the FastAPI application.
+    On entering the context, the status is set to "🟢 FILARMONIKI IS ONLINE" for the specified channel.
+    On exiting the context, the status is changed to "🔴 FILARMONIKI IS OFFLINE" for the specified channel.
 
-api = FastAPI()
+    Args:
+        app (FastAPI): The FastAPI application instance
+    """
+    cid = 2
+    bot_presence.set_status("🟢 FILARMONIKI IS ONLINE ", cid)
+    yield
+    bot_presence.set_status("🔴 FILARMONIKI IS OFFLINE ",  cid)
+
+api = FastAPI(lifespan=lifespan)
+
+
+async def startup_event():
+    print("This function will run before the FastAPI server starts up.")
+    # offline_setup.run_online() <-- Your function here
+
 
 
 @api.post("/slack/events")
@@ -312,6 +332,7 @@ async def root():
 
     x = {'print': 'Hello World'}
     return x
+
 
 
 def get_ip_address():
