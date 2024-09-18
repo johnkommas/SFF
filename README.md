@@ -3,7 +3,8 @@
 
 A project that starts a FastAPI server to run various functions and handle specific events.
 
-![promote](https://github.com/user-attachments/assets/bffb8dd8-48a4-490f-bf31-a3ebf6c56251)
+![promote](https://github.com/user-attachments/assets/84f21cab-4cd0-4597-94fa-7e8fca8f4696)
+
 
 
 ## Project Description
