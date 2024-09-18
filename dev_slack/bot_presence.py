@@ -41,6 +41,12 @@ def set_status(represent, cid):
     Returns:
         None
     """
-    slack_todo.delete_with_specific_text(channel_id=channels.channels_id[cid], text="ONLINE OFFLINE")
+    try:
+        slack_todo.delete_with_specific_text(channel_id=channels.channels_id[cid], text="ONLINE OFFLINE")
+    except Exception as e:
+        print(f"An error occurred While Trying To Delete Specific Message from Channel {channels.channels[cid]}: {e}")
     btn = initialize_button(represent)
-    slack_todo.send_text("ONLINE OFFLINE", channels.channels_id[cid], btn)
+    try:
+        slack_todo.send_text("ONLINE OFFLINE", channels.channels_id[cid], btn)
+    except Exception as e:
+        print(f"An error occurred While Trying to Send a Message in Channel {channels.channels[cid]}: {e}")
