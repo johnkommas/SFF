@@ -1,5 +1,5 @@
 from dev_slack import functions
-
+import json
 
 def handle_archive_step_b(view):
     """
@@ -163,3 +163,60 @@ def send_phones():
             }
         ],
     }
+
+
+def format_data_for_slack(data):
+    blocks = []
+    image_url = 'https://raw.githubusercontent.com/johnkommas/CodeCademy_Projects/master/img/images.png'
+    for key, value in data.items():
+        if isinstance(value, list):
+            for idx, item in enumerate(value):
+                if isinstance(item, dict):
+                    blocks.append({
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": f"*{key}*"
+                        }
+                    })
+                    blocks.extend(format_data_for_slack(item))
+                    blocks.append({"type": "divider"})
+                else:
+                    blocks.append({
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": f"*{key}*"
+                        }
+
+                    })
+                    blocks.extend(format_data_for_slack(item))
+
+
+        else:
+            blocks.append({
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*{key}:* {value}"
+                }
+            })
+    return blocks
+
+
+def send_request_sinelefsi():
+    with open("meetings.json", "r") as read_file:
+        data = json.load(read_file)
+
+    blocks = format_data_for_slack(data)
+
+    view = {
+        "type": "modal",
+        "title": {
+            "type": "plain_text",
+            "text": "Meeting Info"
+        },
+        "blocks": blocks
+    }
+
+    return view
