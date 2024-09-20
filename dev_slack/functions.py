@@ -8,7 +8,7 @@ def load_requests():
     Function to load the request data from the json file.
     :return: Dictionary object containing the request data
     """
-    with open('requests.json', 'r', encoding='utf-8') as file:
+    with open('data/requests.json', 'r', encoding='utf-8') as file:
         return json.load(file)
 
 

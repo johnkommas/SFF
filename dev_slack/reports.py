@@ -21,7 +21,7 @@ def log_to_csv(id, user_image, user_name, button, key):
     key (str): The key associated with the button.
     """
 
-    with open('statistic_records.csv', mode='a') as file:
+    with open('data/statistic_records.csv', mode='a') as file:
         writer = csv.writer(file)
         writer.writerow([id, user_image, user_name, button, key, dt.now()])
 

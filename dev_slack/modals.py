@@ -146,7 +146,7 @@ def send_phones():
     image = 'filarmoniki.png'
 
     # Read the text from a .txt file
-    with open('phones.txt', 'r') as file:
+    with open('data/phones.txt', 'r') as file:
         text = file.read()
 
     return {
@@ -207,7 +207,7 @@ def format_data_for_slack(data):
 
 
 def send_request_sinelefsi():
-    with open("meetings.json", "r") as read_file:
+    with open("data/meetings.json", "r") as read_file:
         data = json.load(read_file)
 
     blocks = format_data_for_slack(data)
