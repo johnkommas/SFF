@@ -262,6 +262,7 @@ def publish_home_view(client, event, logger):
     except Exception as e:
         logger.error(f"Error publishing view to Home Tab: {e}")
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -279,13 +280,13 @@ async def lifespan(app: FastAPI):
     # bot_presence.set_status("🔴 FILARMONIKI APP IS OFFLINE ",  cid)
     print("OFFLINE")
 
+
 api = FastAPI(lifespan=lifespan)
 
 
 async def startup_event():
     print("This function will run before the FastAPI server starts up.")
     # offline_setup.run_online() <-- Your function here
-
 
 
 @api.post("/slack/events")
@@ -351,7 +352,6 @@ async def root():
 
     x = {'print': 'Hello World'}
     return x
-
 
 
 def get_ip_address():
