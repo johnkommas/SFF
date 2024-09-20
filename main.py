@@ -1,3 +1,5 @@
+#  Copyright (c) Ioannis E. Kommas 2024. All Rights Reserved
+
 import socket
 import uvicorn
 from fastapi import FastAPI, Request

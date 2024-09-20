@@ -1,3 +1,5 @@
+#  Copyright (c) Ioannis E. Kommas 2024. All Rights Reserved
+
 from datetime import datetime as dt
 from dev_slack import channels, slack_todo
 import csv

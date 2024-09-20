@@ -1,3 +1,5 @@
+#  Copyright (c) Ioannis E. Kommas 2024. All Rights Reserved
+
 from dev_slack import functions
 import json
 
