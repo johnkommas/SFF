@@ -166,42 +166,42 @@ def send_phones():
 
 
 def format_data_for_slack(data):
-    blocks = []
     image_url = 'https://raw.githubusercontent.com/johnkommas/CodeCademy_Projects/master/img/images.png'
-    for key, value in data.items():
-        if isinstance(value, list):
-            for idx, item in enumerate(value):
-                if isinstance(item, dict):
-                    blocks.append({
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": f"*{key}*"
-                        }
-                    })
-                    blocks.extend(format_data_for_slack(item))
-                    blocks.append({"type": "divider"})
-                else:
-                    blocks.append({
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": f"*{key}*"
-                        }
-
-                    })
-                    blocks.extend(format_data_for_slack(item))
-
-
-        else:
+    blocks = []
+    for (outer_key, outer_value) in data.items():
+        blocks.append({
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f"*{outer_key}*"
+            },
+            "accessory": {
+                "type": "image",
+                "image_url": image_url,
+                "alt_text": 'image'
+            }
+        })
+        for (inner_key, nested_dict) in outer_value.items():
             blocks.append({
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"*{key}:* {value}"
+                    "text": f"_{inner_key}_"
                 }
             })
+            for key, value in nested_dict.items():
+                blocks.append({
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"*{key}:* {value}"
+                    }
+                })
+            blocks.append({"type": "divider"})
     return blocks
+
+
+
 
 
 def send_request_sinelefsi():
