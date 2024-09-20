@@ -116,6 +116,23 @@ def action_button_click(body, ack, say, logger, client):
         reports.button_reports(body, client, logger, text)
 
 
+@app.action("request_sinelefsi")
+def action_button_click(body, ack, say, logger, client):
+    text = 'ΑΡΧΕΙΟ ΣΥΝΕΛΕΥΣΕΙΣ Δ.Σ.'
+    try:
+        # Acknowledge the shortcut request
+        ack()
+        # Call the views_open method using the built-in WebClient
+
+        client.views_open(
+            trigger_id=body["trigger_id"],
+            view=modals.send_request_sinelefsi())
+    except Exception as e:
+        logger.error(f"Error responding to 'archive_step_b' button click: {e}")
+    finally:
+        reports.button_reports(body, client, logger, text)
+
+
 @app.view("button_archive_step_b")
 def handle_submission(ack, body, view, logger, client):
     """
@@ -256,9 +273,11 @@ async def lifespan(app: FastAPI):
         app (FastAPI): The FastAPI application instance
     """
     cid = 2
-    bot_presence.set_status("🟢 FILARMONIKI IS ONLINE ", cid)
+    # bot_presence.set_status("🟢 FILARMONIKI APP IS ONLINE ", cid)
+    print("ONLINE")
     yield
-    bot_presence.set_status("🔴 FILARMONIKI IS OFFLINE ",  cid)
+    # bot_presence.set_status("🔴 FILARMONIKI APP IS OFFLINE ",  cid)
+    print("OFFLINE")
 
 api = FastAPI(lifespan=lifespan)
 
