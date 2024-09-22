@@ -87,7 +87,7 @@ def expose_statistics():
     Returns:
     list: A list of Slack blocks representing the statistics information.
     """
-    df = pd.read_csv('statistic_records.csv')
+    df = pd.read_csv('data/statistic_records.csv')
     total_presses = df['report'].count()
     user_presses = df.groupby('username')['report'].count()
 
