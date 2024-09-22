@@ -1,6 +1,9 @@
 #  Copyright (c) Ioannis E. Kommas 2024. All Rights Reserved
 
 import json
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 
 def load_requests():
@@ -49,8 +52,7 @@ def display_status(request, protocol):
     :return: None
     """
     request_info = request.get(protocol)
-    hyperlink = 'https://raw.githubusercontent.com/johnkommas/CodeCademy_Projects/master/img/'
-    image_urls = [f"{hyperlink}{img}" for img in ['Signpng.png', 'images.png', 'onedrive.png']]
+    image_urls = [os.getenv('FILARMONIKI_LOGO'), os.getenv('AGIOS_NIKOLAOS_LOGO'), os.getenv('ONE_DRIVE_LOGO')]
 
     management_map = {
         'management_a': 'ΣΥΝΕΛΕΥΣΗ ΔΣ',
@@ -63,7 +65,7 @@ def display_status(request, protocol):
         'municipality_d': 'ΑΠΟΦΑΣΗ'}
 
     onedrive_map = {
-        'onedrive_link_a': '(PDF) ΑΡΧΙΚΟ ΑΙΤΗΜΑ '
+        'onedrive_link_a': ':pdf: ΑΡΧΙΚΟ ΑΙΤΗΜΑ '
     }
 
     onedrive_pins = {
