@@ -2,6 +2,9 @@
 
 from dev_slack import functions
 import json
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 def handle_archive_step_b(view):
     """
@@ -22,6 +25,38 @@ def handle_archive_step_b(view):
     key = list(key)
     selected_value = view["state"]["values"][key[0]]["archive_step_b"]["selected_option"]["value"]
     return selected_value
+
+
+def choose_katastatiko():
+    """
+    Creates a modal view for katastatiko search.
+
+    This function generates a modal view in Slack that allows users to choose from a list of requests.
+    The requests are loaded into the options for a static select menu, and the selected request's key
+    is returned when the user submits the form.
+
+    Returns:
+    dict: A dictionary representing a Slack modal view with a static select menu of requests.
+    """
+    image_url = os.getenv('FILARMONIKI_LOGO')
+    text = f'<{os.getenv('KATASTATIKO')}|ΚΑΤΑΣΤΑΤΙΚΟ>'
+    return {
+        "type": "modal",
+        "title": {"type": "plain_text", "text": "ΚΑΤΑΣΤΑΤΙΚΟ", "emoji": True},
+        "blocks": [
+            {
+                "type": "image",
+                "image_url": image_url,
+                "alt_text": "name",
+            },
+
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": text},
+            }
+        ],
+    }
+
 
 
 def choose_archive():
@@ -143,7 +178,7 @@ def send_phones():
     dict: A dictionary representing a Slack modal with an image block and section block containing phone numbers.
     """
 
-    image = 'filarmoniki.png'
+    image = os.getenv('FILARMONIKI_PHOTO')
 
     # Read the text from a .txt file
     with open('data/phones.txt', 'r') as file:
@@ -155,7 +190,7 @@ def send_phones():
         "blocks": [
             {
                 "type": "image",
-                "image_url": f"https://raw.githubusercontent.com/johnkommas/CodeCademy_Projects/master/img/{image}",
+                "image_url": image,
                 "alt_text": "name",
             },
 
@@ -168,7 +203,7 @@ def send_phones():
 
 
 def format_data_for_slack(data):
-    image_url = 'https://raw.githubusercontent.com/johnkommas/CodeCademy_Projects/master/img/images.png'
+    image_url = os.getenv('AGIOS_NIKOLAOS_LOGO')
     blocks = []
     for (outer_key, outer_value) in data.items():
         blocks.append({
