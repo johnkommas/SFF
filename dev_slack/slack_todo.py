@@ -37,8 +37,13 @@ def delete(channel_id, message_id):
         )
         logger.info(result)
 
+
     except SlackApiError as e:
-        logger.error(f"Error deleting message: {e}")
+
+        if e.response['error'] == 'ratelimited':
+            logger.error('Rate limit hit')
+        else:
+            logger.error(f"Error deleting message: {e}")
 
 
 def get_from_text_history(channel_id, text):
