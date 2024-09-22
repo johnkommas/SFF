@@ -42,6 +42,44 @@ def handle_message_events(body, logger, ):
 
     logger.info(body)
 
+@app.action("request_katastatiko")
+def action_button_click(body, ack, say, logger, client):
+    """
+    Handles the click of a button named 'request_arxeio' within a Slack App.
+
+    This function is activated when a button with the action_id 'request_arxeio' is clicked within a Slack App.
+    Upon activation, the function sends an acknowledgment back to Slack to ensure smooth processing.
+    Next, it calls the 'views_open' method from the Slack client, which opens a new modal window in Slack.
+    The content of the modal window is specified by the function 'modals.choose_archive()'.
+
+    Parameters:
+    body (dict): The event payload from the button click event.
+    ack (function): A function to send acknowledgments from a callback to Slack's APIs.
+    say (function): A function that sends a message to the channel from which the event was triggered.
+    logger (Logger): A Logger instance for logging the event payload.
+    client (SlackClient): An authenticated Slack client for making API calls.
+
+    Returns:
+    None
+
+    Note:
+    The 'ack()' function should be called immediately at the start of the event handler to acknowledge Slack.
+    The 'client.views_open()' function opens a new view (modal) within the Slack interface.
+    """
+
+    # print(body)
+    # Acknowledge the shortcut request
+    ack()
+    text = 'ΚΑΤΑΣΤΑΤΙΚΟ ΣΥΛΛΟΓΟΥ'
+    # Call the views_open method using the built-in WebClient
+    try:
+        client.views_open(
+            trigger_id=body["trigger_id"],
+            view=modals.choose_katastatiko())
+    except Exception as e:
+        logger.error(f"Error responding to 'archive_step_b' button click: {e}")
+    finally:
+        reports.button_reports(body, client, logger, text)
 
 @app.action("request_arxeio")
 def action_button_click(body, ack, say, logger, client):
@@ -120,7 +158,7 @@ def action_button_click(body, ack, say, logger, client):
 
 @app.action("request_sinelefsi")
 def action_button_click(body, ack, say, logger, client):
-    text = 'ΑΡΧΕΙΟ ΣΥΝΕΛΕΥΣΕΙΣ Δ.Σ.'
+    text = 'ΠΡΑΚΤΙΚΑ ΓΕΝΙΚΩΝ ΣΥΝΕΛΕΥΣΕΩΝ'
     try:
         # Acknowledge the shortcut request
         ack()
