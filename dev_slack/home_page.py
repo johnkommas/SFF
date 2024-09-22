@@ -1,9 +1,13 @@
 #  Copyright (c) Ioannis E. Kommas 2024. All Rights Reserved
 from typing import List, Dict
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
-def create_section(text):
+def create_section(text, after=None):
     """
         Creates a section block for a Slack message along with a divider.
 
@@ -18,62 +22,83 @@ def create_section(text):
         tuple: A tuple containing a dictionary for the divider block and a
         dictionary for the section block.
     """
-    return {
-        "type": "divider"
-    }, {
-        "type": "section",
-        "text": {
-            "type": "mrkdwn",
-            "text": text
+    if after:
+        return {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": text
+            }
+        }, {
+            "type": "divider"
         }
-    }
+    else:
+        return {
+            "type": "divider"
+        }, {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": text
+            }
+        }
 
 
-def create_action_block(buttons: List[Dict]) -> Dict[str, List[Dict]]:
-    """
-        Creates an action block for a Slack message.
+def create_block(simple, block_id, text, image, button_text, action_id):
+    if simple:
+        block_element = {
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {"type": "plain_text", "text": button_text, "emoji": True},
+                    "style": "danger",
+                    "value": "approve",
+                    "action_id": action_id,
+                },
+            ],
+        }
+        block_element_2 = {
+            "type": "divider"
+        }
+        return [block_element, block_element_2]
+    else:
+        block_element_1 = {
+            "type": "section",
+            "block_id": block_id,
+            "text": {
+                "type": "mrkdwn",
+                "text": text
+            },
+            "accessory": {
+                "type": "image",
+                "image_url": image,
+                "alt_text": ":mask:"
+            }
+        }
 
-        This function creates an action block which holds interactive components
-        like buttons. The `buttons` parameter should be a List of Dicts where each
-        Dict defines a button (in Slack button JSON format).
+        block_element_2 = {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": ":pushpin: Only Administrators can access this section."
+            },
+            "accessory": {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": button_text
+                },
 
-        Parameters:
-        buttons (List[Dict]): A list of dictionaries where each dictionary is a
-        Slack formatted button component.
+                "action_id": action_id
+            }
+        }
+        block_element_3 = {
+            "type": "divider"
+        }
 
-        Returns:
-        dict: A dictionary representing a Slack 'action' block containing all
-        supplied buttons.
-    """
-    return {
-        "type": "actions",
-        "elements": buttons
-    }
-
-
-def create_button(text: str, action_id: str) -> Dict[str, str]:
-    """
-        Creates a button for a Slack message.
-
-        This function creates a single Slack formatted button component
-        with plain text and a specified action ID.
-
-        Parameters:
-        text (str): The text to be displayed on the button.
-        action_id (str): A unique identifier for the button. When the button is
-                         clicked, Slack sends an interaction payload which
-                         includes actions and the `action_id`.
-
-        Returns:
-        dict: A dictionary representing a Slack 'button' component.
-    """
-    return {
-        "type": "button",
-        "text": {"type": "plain_text", "text": text, "emoji": True},
-        # "style": "danger",
-        "value": "approve",
-        "action_id": action_id,
-    }
+        return [block_element_1, block_element_2, block_element_3]
 
 
 def expose_statistics():
@@ -200,8 +225,12 @@ def run(event, admin, super_user):
     part_c = f"""
 \tΓια την πληρέστερη :dart: επιτυχία των επιδιώξεών του, το σωματείο θα επιδιώκει τη συνεργασία :handshake: με όλα τα ομοειδή Σωματεία της ευρύτερης περιοχής του Νομού Λασιθίου, με τον Δήμο Αγίου Νικολάου:office: , τη Δημοτική Κοινότητα Νεάπολης:cityscape: και εν γένει φορείς οι οποίοι έχουν στο καταστατικό τους κοινούς ή όμοιους σκοπούς:flags:.
 """
-    part_d = f""":gear: Ακολουθήστε μας:  \t<https://www.facebook.com/profile.php?id=61565483531332|:facebook: Facebook >
+    part_d = f""":gear: Ακολουθήστε μας:  \t<{os.getenv('FACEBOOK_LINK')}|:facebook: Facebook >
 """
+    katastatiko = f""":gear: ΚΑΤΑΣΤΑΤΙΚΟ  \t<{os.getenv('KATASTATIKO')}|:pdf: ONLINE HERE >
+:pushpin: Only Administrators can see this section."""
+    mitroo = f""":gear: ΜΗΤΡΩΟ ΜΕΛΩΝ ΣΥΛΛΟΓΟΥ  \t<{os.getenv('MHTRO')}|:excel: ONLINE HERE>
+:pushpin: Only Administrators can see this section."""
 
     sections = [
         create_section(part_a),
@@ -236,19 +265,46 @@ def run(event, admin, super_user):
                 },
             ],
         },
+        {
+            "type": "divider"
+        },
     ]
+    # block_id, text, image, button_text, action_id
+
+    a = """
+> *ΑΣΦΑΛΕΙΑ*: 🔑 ΜΟΝΟ ΜΕΛΗ ΔΣ
+> *ΣΥΧΝΟΤΗΤΑ*: :date: MHNIAIO
+> *ΠΟΛΥΕΤΑΙΡΙΚΟ*: OXI
+    """
+    b = """
+> *ΑΣΦΑΛΕΙΑ*: 🔑 ΜΟΝΟ ΜΕΛΗ ΔΣ
+> *ΣΥΧΝΟΤΗΤΑ*: :date: ΕΒΔΟΜΑΔΙΑΙΟ
+> *ΠΟΛΥΕΤΑΙΡΙΚΟ*: NAI
+    """
 
     admin_buttons_texts_ids = [
-        (":card_index_dividers: ΚΑΤΑΣΤΑΤΙΚΟ ΣΥΛΛΟΓΟΥ", "request_katastatiko"),
-        (":card_index_dividers: ΑΡΧΕΙΟ ΟΙ ΑΙΤΗΣΕΙΣ ΜΑΣ", "request_arxeio"),
-        (":card_index_dividers: ΑΡΧΕΙΟ ΣΥΝΕΛΕΥΣΕΙΣ ΔΣ", "request_sinelefsi"),
+        (0, "block_id_c", a, os.getenv('FILARMONIKI_LOGO'), ":card_index_dividers: ΑΡΧΕΙΟ ΟΙ ΑΙΤΗΣΕΙΣ ΜΑΣ",
+         "request_arxeio"),
+        (0, "block_id_d", b, os.getenv('AGIOS_NIKOLAOS_LOGO'), ":card_index_dividers: ΠΡΑΚΤΙΚΑ ΓΕΝΙΚΩΝ ΣΥΝΕΛΕΥΣΕΩΝ",
+         "request_sinelefsi"),
+        (0, "block_id_e", a, os.getenv('FILARMONIKI_LOGO'), ":card_index_dividers: ΠΡΑΚΤΙΚΑ ΔΙΟΙΚΗΤΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ",
+         "request_ds"),
+        (0, "block_id_f", a, os.getenv('FILARMONIKI_LOGO'), ":card_index_dividers: ΒΙΒΛΙΟ ΕΣΟΔΩΝ ΕΞΟΔΩΝ",
+         "request_money"),
+        (0, "block_id_g", a, os.getenv('FILARMONIKI_LOGO'), ":card_index_dividers: ΒΙΒΛΙΟ ΠΕΡΙΟΥΣΙΑΚΩΝ ΣΤΟΙΧΕΙΩΝ",
+         "request_periousia"),
+        (0, "block_id_h", a, os.getenv('FILARMONIKI_LOGO'), ":card_index_dividers: ΠΡΩΤΟΚΟΛΛΟ ΑΛΛΗΛΟΓΡΑΦΙΑΣ",
+         "request_protocol"),
     ]
 
     if admin:
-        for text, action_id in admin_buttons_texts_ids:
-            button = create_button(text, action_id)
-            action_block = create_action_block([button])
-            blocks.append(action_block)
+        a = create_section(katastatiko, 1)
+        blocks.extend(a,)
+        b = create_section(mitroo, 1)
+        blocks.extend(b)
+        for simple, block_id, text, image, button_text, action_id in admin_buttons_texts_ids:
+            action_block = create_block(simple, block_id, text, image, button_text, action_id)
+            blocks.extend(action_block)
     if super_user:
         blocks.extend(expose_statistics())
 
