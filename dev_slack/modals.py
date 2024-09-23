@@ -238,9 +238,6 @@ def format_data_for_slack(data):
     return blocks
 
 
-
-
-
 def send_request_sinelefsi():
     with open("data/meetings.json", "r") as read_file:
         data = json.load(read_file)
