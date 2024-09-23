@@ -90,7 +90,8 @@ def create_block(simple, block_id, text, image, button_text, action_id):
                     "emoji": True,
                     "text": button_text
                 },
-
+                "style": "primary",
+                "value": "approve",
                 "action_id": action_id
             }
         }
@@ -272,28 +273,35 @@ def run(event, admin, super_user):
     # block_id, text, image, button_text, action_id
 
     a = """
-> *ΑΣΦΑΛΕΙΑ*: 🔑 ΜΟΝΟ ΜΕΛΗ ΔΣ
-> *ΣΥΧΝΟΤΗΤΑ*: :date: MHNIAIO
-> *ΠΟΛΥΕΤΑΙΡΙΚΟ*: OXI
+>:card_index_dividers: *ΑΡΧΕΙΟ ΟΙ ΑΙΤΗΣΕΙΣ ΜΑΣ*
     """
     b = """
-> *ΑΣΦΑΛΕΙΑ*: 🔑 ΜΟΝΟ ΜΕΛΗ ΔΣ
-> *ΣΥΧΝΟΤΗΤΑ*: :date: ΕΒΔΟΜΑΔΙΑΙΟ
-> *ΠΟΛΥΕΤΑΙΡΙΚΟ*: NAI
+>:card_index_dividers: *ΠΡΑΚΤΙΚΑ ΓΕΝΙΚΩΝ ΣΥΝΕΛΕΥΣΕΩΝ*
     """
-
+    c = """
+>:card_index_dividers: *ΠΡΑΚΤΙΚΑ Δ.Σ.*
+        """
+    d = """
+> :card_index_dividers: *ΒΙΒΛΙΟ ΕΣΟΔΩΝ ΕΞΟΔΩΝ*
+        """
+    e = """
+> :card_index_dividers: *ΒΙΒΛΙΟ ΠΕΡΙΟΥΣΙΑΚΩΝ ΣΤΟΙΧΕΙΩΝ*
+        """
+    f = """
+> :card_index_dividers: *ΠΡΩΤΟΚΟΛΛΟ ΑΛΛΗΛΟΓΡΑΦΙΑΣ*
+        """
     admin_buttons_texts_ids = [
-        (0, "block_id_c", a, os.getenv('FILARMONIKI_LOGO'), ":card_index_dividers: ΑΡΧΕΙΟ ΟΙ ΑΙΤΗΣΕΙΣ ΜΑΣ",
+        (0, "block_id_c", a, os.getenv('FILARMONIKI_LOGO'), "ΑΣ ΞΕΚΙΝΗΣΟΥΜΕ",
          "request_arxeio"),
-        (0, "block_id_d", b, os.getenv('AGIOS_NIKOLAOS_LOGO'), ":card_index_dividers: ΠΡΑΚΤΙΚΑ ΓΕΝΙΚΩΝ ΣΥΝΕΛΕΥΣΕΩΝ",
+        (0, "block_id_d", b, os.getenv('AGIOS_NIKOLAOS_LOGO'), "ΑΣ ΞΕΚΙΝΗΣΟΥΜΕ",
          "request_sinelefsi"),
-        (0, "block_id_e", a, os.getenv('FILARMONIKI_LOGO'), ":card_index_dividers: ΠΡΑΚΤΙΚΑ ΔΙΟΙΚΗΤΙΚΟΥ ΣΥΜΒΟΥΛΙΟΥ",
+        (0, "block_id_e", c, os.getenv('FILARMONIKI_LOGO'), "ΑΣ ΞΕΚΙΝΗΣΟΥΜΕ",
          "request_ds"),
-        (0, "block_id_f", a, os.getenv('FILARMONIKI_LOGO'), ":card_index_dividers: ΒΙΒΛΙΟ ΕΣΟΔΩΝ ΕΞΟΔΩΝ",
+        (0, "block_id_f", d, os.getenv('FILARMONIKI_LOGO'), "ΑΣ ΞΕΚΙΝΗΣΟΥΜΕ",
          "request_money"),
-        (0, "block_id_g", a, os.getenv('FILARMONIKI_LOGO'), ":card_index_dividers: ΒΙΒΛΙΟ ΠΕΡΙΟΥΣΙΑΚΩΝ ΣΤΟΙΧΕΙΩΝ",
+        (0, "block_id_g", e, os.getenv('FILARMONIKI_LOGO'), "ΑΣ ΞΕΚΙΝΗΣΟΥΜΕ",
          "request_periousia"),
-        (0, "block_id_h", a, os.getenv('FILARMONIKI_LOGO'), ":card_index_dividers: ΠΡΩΤΟΚΟΛΛΟ ΑΛΛΗΛΟΓΡΑΦΙΑΣ",
+        (0, "block_id_h", f, os.getenv('FILARMONIKI_LOGO'), "ΑΣ ΞΕΚΙΝΗΣΟΥΜΕ",
          "request_protocol"),
     ]
 
