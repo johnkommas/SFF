@@ -49,8 +49,8 @@ def button_reports(body, client, logger, text, key=None):
     day = dt.now().strftime('%d/%m/%Y %H:%M:%S')
     user = body["user"]["id"]
     response = client.users_info(user=user)
-    if user in os.getenv('SLACK_SUPER_USERS'):
-        return
+    # if user in os.getenv('SLACK_SUPER_USERS'):
+    #     return
     if response["ok"]:
         # Extract username from the response
         user_name = response["user"]["profile"]["real_name"]

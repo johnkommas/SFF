@@ -149,7 +149,7 @@ def expose_statistics():
     elements = [
         {"type": "mrkdwn",
          "text": f"`{'█' * int((count / total_presses) * 10) + ' ' * (10 - int((count / total_presses) * 10))}` "
-                 f"({button}: {count / total_presses * 100:.1f}% - {count} times)"
+                 f"({button[0:21] + "..." if len(button) > 24 else button} {count / total_presses * 100:.1f}% - {count} times)"
          } for button, count in sorted_total_presses
     ]
 
@@ -175,7 +175,7 @@ def expose_statistics():
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"*<@{id}>:*\n> Total:{presses}"
+                "text": f"*<@{id}>*\n*Total User Actions:* {presses}"
             },
             "accessory": {
                 "type": "image",
@@ -190,7 +190,7 @@ def expose_statistics():
         elements = [
             {"type": "mrkdwn",
              "text": f"`{'█' * int((count / presses) * 10) + ' ' * (10 - int((count / presses) * 10))}` "
-                     f"({button}: {count / presses * 100:.1f}% - {count} times)"
+                     f"({button[0:21] + "..." if len(button) > 24 else button} {count / presses * 100:.1f}% - {count} times)"
              } for button, count in sorted_reports
         ]
 
