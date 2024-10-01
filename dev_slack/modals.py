@@ -98,10 +98,29 @@ def choose_archive():
         },
         "title": {
             "type": "plain_text",
-            "text": ":sffn: ΈΝΑΡΞΗ ΑΝΑΖΗΤΗΣΗΣ",
+            "text": ":sffn:",
             "emoji": True
         },
         "blocks": [
+            {
+                "type": "header",
+                "text": {
+                    "type": "plain_text",
+                    "text": ":tada: ΑΡΧΕΙΟ ΟΙ ΑΙΤΗΣΕΙΣ ΜΑΣ."
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": ":o: *Νέα Αναζήτηση*\n\n Παρακάτω *ΕΠΙΛΕΞΤΕ* μία από τις αιτήσεις του συλλόγου μας και στην συνέχεια πατήστε *ΑΝΑΖΗΤΗΣΗ* για να εμφανιστούν τα αποτελέσματα",
+                },
+                "accessory": {
+                    "type": "image",
+                    "image_url": os.getenv("FILARMONIKI_LOGO"),
+                    "alt_text": "Side Image",
+                },
+            },
             {
                 "type": "section",
                 "text": {
