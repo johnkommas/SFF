@@ -169,12 +169,13 @@ def expose_statistics():
     for user, presses in user_presses.items():
         user_reports = user_button_presses[user]
         user_image = user_images[user]
+        id = df[df['username'] == user]['id'].iloc[0]
         # Add user's profile picture to blocks
         blocks.append({
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"*{user}:*\n> Total:{presses}"
+                "text": f"*<@{id}>:*\n> Total:{presses}"
             },
             "accessory": {
                 "type": "image",
